@@ -32,11 +32,6 @@ class Permissions {
 
 const checkPerms = (permission) => {
   return (req, res, next) => {
-    const userRole = req.user ? req.user.role : 'anonymous';
-    const userPermissions = new Permissions().getPermissionsByRoleName(
-      userRole
-    );
-
     /**
      * STEPS
      * 
@@ -44,9 +39,15 @@ const checkPerms = (permission) => {
         2. Use shop slug to get shop ID.
         3. Use shop ID to get the user's role.
         4. Use the user's role to get the user's permissions.
+        5. Check if the user's permissions includes the permission we are checking for.
      * 
      * 
      */
+
+    const userRole = req.user ? req.user.role : 'anonymous';
+    const userPermissions = new Permissions().getPermissionsByRoleName(
+      userRole
+    );
 
     if (userPermissions.includes(permission)) {
       return next();
